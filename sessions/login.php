@@ -70,7 +70,7 @@
         <p>Логин</p>
         <input type="text" name="login">
         <p>Пароль</p>
-        <input type="text" name="pass"><br><br>
+        <input type="password" name="pass"><br><br>
         <input type="submit" value="Войти">
     </form>
     <p><?=$message ?></p>
