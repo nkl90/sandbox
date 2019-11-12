@@ -1,16 +1,16 @@
 <?php
+    // Инициализируем сессию
+    session_start();
+
     // Если пользователь не авторизован, то перенапрявляем к странице авторизации
-    if (!isset($_COOKIE['login']) || !isset($_COOKIE['pass'])) {
+    if (empty($_SESSION['login']) || empty($_SESSION['pass'])) {
         header("Location: /sessions/login.php");
         exit;
     }
 
     // Выход из учетной записи и перенаправление на страницу авторизации
     if (count($_POST) > 0) {
-        setcookie('login', 0, time() - 1, '/');
-        setcookie('pass', 0, time() - 1, '/');
-        
-        $_SESSION = array();
+        session_unset();
 
         header("Location: /sessions/login.php");
         exit;

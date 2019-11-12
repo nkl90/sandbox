@@ -1,6 +1,9 @@
 <?php
+    // Инициализируем сессию
+    session_start();
+
     // Если пользователь уже авторизован, то перенаправляем его на защищенную страницу
-    if (isset($_COOKIE['login']) && isset($_COOKIE['pass'])) {
+    if (isset($_SESSION['login']) && isset($_SESSION['pass'])) {
         header("Location: /sessions/secure-page.php");
         exit;
     }
@@ -24,17 +27,13 @@
             // Получаем данные о пользователе с базы данных
             $data = getUser($login, $pass);
 
-            if ($data == NULL) {
+	    // Если переменная $data пуста значит такого пользователя нет и выводим сообщение
+            if (empty($data)) {
                 $message = 'Неправильный логин или пароль!';
             } else {
-                // В случае успешного входа инициализируем сессию
-                // И добавляем user_id в сессию
-                session_start();
-                $_SESSION['user_id'] = $data['user_id'];
-
-                // И добавляем в куки логин и пароль пользователя со сроком в 1 день
-                setcookie('login', $login, time() + 86400, '/');
-                setcookie('pass', $pass, time() + 86400, '/');
+                // В случае успешного входа добавляем логин и пароль в сессию
+                $_SESSION['login'] = $data['login'];
+                $_SESSION['pass'] = $data['pass'];
 
                 // Перенаправляем к защищенной странице
                 header("Location: /sessions/secure-page.php");
@@ -47,12 +46,13 @@
     // Возвращает NULL, если не находит такого пользователя
     function getUser($login, $pass) {
         $db = new PDO('mysql:host=localhost;dbname=sandbox;charset=utf8', 'adilet', '12345');
-        $statement = $db->prepare('SELECT user_id, login, pass FROM users WHERE login=:login AND pass=:pass');
+        var_dump($db);
+        $statement = $db->prepare('SELECT login, pass FROM users WHERE login=:login AND pass=:pass');
         $queryArray = ['login' => $login, 'pass' => $pass];
         $statement->execute($queryArray);
 
         while($data = $statement->fetch(PDO::FETCH_ASSOC)) {
-	    return $data;
+            return $data;
         }
     }
 ?>

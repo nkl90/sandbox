@@ -1,7 +1,9 @@
 <?php
-    // Аутентификация пользователя для доступа к этой странце
-    // При неудаче переброс на страницу авторизации
-    if (!isset($_COOKIE['login']) || !isset($_COOKIE['pass'])) {
+    // Инициализируем сессию
+    session_start();
+
+    // Если пользователь не авторизован, то перенапрявляем к странице авторизации
+    if (empty($_SESSION['login']) || empty($_SESSION['pass'])) {
         header("Location: /sessions/login.php");
         exit;
     }
