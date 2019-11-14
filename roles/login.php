@@ -2,13 +2,13 @@
     include_once 'functions.php';
 
     // Проверка на наличие сессии
-    if (!sessionCheck()) {
+    if (session_status() == 1) {
         session_start();
     }
 
     // Если пользователь уже авторизован, то перенаправляем его на общую страницу
     if ($_SESSION['isAuth']) {
-        header("Location: /sessions/non-secure-page.php");
+        header("Location: /roles/non-secure-page.php");
         exit;
     }
 
@@ -28,7 +28,7 @@
             // Хэшируем пароль для сравнения с паролем в БД
             $pass = hash('sha256', $pass);
 
-            // Получаем данные о пользователе с базы данных
+            // Получаем user_id пользователя с базы данных
             $userId = getUserId($login, $pass);
 
 	        // Если переменная $userId пуста значит такого пользователя нет и выводим сообщение
@@ -36,12 +36,12 @@
                 $message = 'Неправильный логин или пароль!';
             } else {
                 // В случае успешного входа записываем в сессию
-                // isAuth и его user_id
+                // isAuth = true и его user_id
                 $_SESSION['isAuth'] = true;
                 $_SESSION['user_id'] = $userId;
 
                 // Перенаправляем к общей странице
-                header("Location: /sessions/non-secure-page.php");
+                header("Location: /roles/non-secure-page.php");
                 exit;
             }
         }
@@ -65,5 +65,8 @@
         <input type="submit" value="Войти">
     </form>
     <p><?=$message ?></p>
+    <div>
+        <?php showRoles(); ?>
+    </div>
 </body>
 </html>

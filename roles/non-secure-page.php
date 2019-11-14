@@ -1,4 +1,11 @@
 <?php
+    include_once 'functions.php';
+
+    // Проверка на наличие сессии
+    if (session_status() == 1) {
+        session_start();
+    }
+    
     $content = 'Любая динамическая незащищенная информация, доступная всем!'
 ?>
 
@@ -13,6 +20,9 @@
 <body>
     <div class="content">
         <?=$content ?>
+    </div>
+    <div>
+        <?php showRoles(); ?>
     </div>
 </body>
 </html>

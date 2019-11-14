@@ -2,13 +2,13 @@
     include_once 'functions.php';
 
     // Проверка на наличие сессии
-    if (!sessionCheck()) {
+    if (session_status() == 1) {
         session_start();
     }
 
     // Если пользователь не авторизован, то перенапрявляем к странице авторизации
     if (!$_SESSION['isAuth']) {
-        header("Location: /sessions/login.php");
+        header("Location: /roles/login.php");
         exit;
     }
 
@@ -18,7 +18,7 @@
         setcookie('PHPSESSID', 0, time() - 1, '/');
         session_destroy();
 
-        header("Location: /sessions/login.php");
+        header("Location: /roles/login.php");
         exit;
     }
 ?>
@@ -35,5 +35,8 @@
     <form action="logout.php" method="post">
         <input type="submit" value="Выйти" name="logout">
     </form>
+    <div>
+        <?php showRoles(); ?>
+    </div>
 </body>
 </html>

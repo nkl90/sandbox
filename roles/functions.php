@@ -1,12 +1,4 @@
 <?php
-    // Функция для проверки наличия сессии
-    function sessionCheck() {
-        if (session_status() == 2) {
-            return true;
-        }
-        return false;
-    }
-
     // Функция для получения user_id с БД
     function getUserId($login, $pass) {
         $query = 'SELECT user_id FROM users WHERE login=:login AND pass=:pass';
@@ -32,4 +24,28 @@
         $queryArray = $params;
         $statement->execute($queryArray);
         return $statement->fetchAll(PDO::FETCH_COLUMN);
+    }
+
+    // Функция для показа ролей пользователя
+    function showRoles() {
+        echo '<br> Права которыми вы обладаете: <br>';
+        echo '<ul>';
+        
+        $roles = getRoles($_SESSION['user_id']);
+    
+        if (empty($roles)) {
+            echo '<li> Вы не обладаете какими-либо правами. </li>';
+        } else {
+            foreach ($roles as &$role) {
+                switch ($role) {
+                    case 'ROLE_ADMIN':
+                        echo '<li> Администратор </li>';
+                        break;
+                    case 'ROLE_USER':
+                        echo '<li> Пользователь </li>';
+                        break;
+                }
+            }
+        }
+        echo '</ul>';
     }
