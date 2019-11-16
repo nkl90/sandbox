@@ -7,7 +7,7 @@
     }
 
     // Если пользователь уже авторизован, то перенаправляем его на общую страницу
-    if ($_SESSION['isAuth']) {
+    if (isset($_SESSION['user_id'])) {
         header("Location: /roles/non-secure-page.php");
         exit;
     }
@@ -35,9 +35,7 @@
             if (empty($userId)) {
                 $message = 'Неправильный логин или пароль!';
             } else {
-                // В случае успешного входа записываем в сессию
-                // isAuth = true и его user_id
-                $_SESSION['isAuth'] = true;
+                // В случае успешного входа записываем в сессию user_id пользователя
                 $_SESSION['user_id'] = $userId;
 
                 // Перенаправляем к общей странице
@@ -66,7 +64,10 @@
     </form>
     <p><?=$message ?></p>
     <div>
-        <?php showRoles(); ?>
+        <?php 
+            showUser();
+            showRoles();
+        ?>
     </div>
 </body>
 </html>

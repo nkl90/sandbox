@@ -7,7 +7,7 @@
     }
 
     // Если пользователь не авторизован, то перенапрявляем к странице авторизации
-    if (!$_SESSION['isAuth']) {
+    if (empty($_SESSION['user_id'])) {
         header("Location: /roles/login.php");
         exit;
     }
@@ -36,7 +36,10 @@
         <input type="submit" value="Выйти" name="logout">
     </form>
     <div>
-        <?php showRoles(); ?>
+        <?php
+            showUser();
+            showRoles();
+        ?>
     </div>
 </body>
 </html>

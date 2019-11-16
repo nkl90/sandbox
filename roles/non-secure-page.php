@@ -22,7 +22,10 @@
         <?=$content ?>
     </div>
     <div>
-        <?php showRoles(); ?>
+        <?php
+            showUser();
+            showRoles();
+        ?>
     </div>
 </body>
 </html>

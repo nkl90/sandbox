@@ -7,7 +7,7 @@
     }
 
     // Проверка на авторизацию пользователя
-    if (!$_SESSION['isAuth']) {
+    if (empty($_SESSION['user_id'])) {
         header("Location: /roles/login.php");
         exit;
     } else {
@@ -17,6 +17,7 @@
 
         if (!in_array("ROLE_USER", $roles)) {
             echo 'Извините, но у вас недостаточно прав для просмотра этой страницы! <br>';
+            showUser();
             showRoles();
             exit;
         }
@@ -38,7 +39,10 @@
         <?=$content ?>
     </div>
     <div>
-        <?php showRoles(); ?>
+        <?php
+            showUser();
+            showRoles();
+        ?>
     </div>
 </body>
 </html>
